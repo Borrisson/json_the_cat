@@ -1,15 +1,13 @@
 const request = require('request');
-const [args] = process.argv.slice(2, 3);
-const CATS = (catBreed) => {
+const fetchBreedDescription = (catBreed, callback) => {
   request(`https://api.thecatapi.com/v1/breeds/search?q=${catBreed}`, (error, response, body) => {
     if (!error) {
       const data = JSON.parse(body)[0];
-      console.log(data.description);
+      callback(null, data.description);
     } else {
-      console.log('There was an error with your request:  ' + error);
+      callback('There was an error with your request:  ' + error);
     }
   });
 };
 
-
-CATS(args);
+module.exports = fetchBreedDescription;
