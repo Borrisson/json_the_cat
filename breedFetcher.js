@@ -1,13 +1,15 @@
 const request = require('request');
 const fetchBreedDescription = (catBreed, callback) => {
   request(`https://api.thecatapi.com/v1/breeds/search?q=${catBreed}`, (error, response, body) => {
-    if (!error) {
-      const data = JSON.parse(body)[0];
-      callback(null, data.description);
-    } else {
+    const data = JSON.parse(body);
+    if (!error && data.length) {
+      callback(null, data[0].description);
+    } else if (error) {
       callback('There was an error with your request:  ' + error);
+    } else {
+      callback('There was an error with your cat breed request:  ' + catBreed);
     }
   });
 };
 
-module.exports = fetchBreedDescription;
+module.exports = { fetchBreedDescription };
